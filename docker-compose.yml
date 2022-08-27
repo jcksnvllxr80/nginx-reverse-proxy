@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  web:
+    build: 
+      context: ./nginx
+    volumes:
+      - ./nginx:/usr/share/nginx/html
+    ports:
+      - "8080:8080"
+  php:
+    image: php:fpm-alpine
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./nginx:/usr/share/nginx/html
+  node:
+    image: node:current-alpine
+    # Override the existing entrypoint to tell Node to execute the index.js file
+    entrypoint: ['node','/usr/share/nginx/html/index.js']
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./nginx:/usr/share/nginx/html
